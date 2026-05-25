@@ -1,0 +1,965 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>王先生 - 产品经理</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #12121a;
+            --bg-card: #1a1a24;
+            --text-primary: #f0f0f5;
+            --text-secondary: #a0a0b0;
+            --accent: #c9a96e;
+            --accent-light: #e0c088;
+            --border: rgba(255,255,255,0.08);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.8;
+            overflow-x: hidden;
+        }
+
+        /* 背景装饰 */
+        .bg-decoration {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .bg-decoration::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(201,169,110,0.08) 0%, transparent 70%);
+            animation: float 20s ease-in-out infinite;
+        }
+
+        .bg-decoration::after {
+            content: '';
+            position: absolute;
+            bottom: -30%;
+            left: -10%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(201,169,110,0.05) 0%, transparent 70%);
+            animation: float 25s ease-in-out infinite reverse;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(30px, -30px) scale(1.1); }
+            66% { transform: translate(-20px, 20px) scale(0.95); }
+        }
+
+        /* 导航 */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 24px 48px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            background: rgba(10,10,15,0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .logo {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent);
+            letter-spacing: 4px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 40px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            letter-spacing: 2px;
+            transition: color 0.3s;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: var(--accent);
+            transition: width 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--text-primary);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* 主容器 */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 48px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* 融合区域 - 左右排版 */
+        .about-advantages {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 120px 0 80px;
+        }
+
+        .about-advantages-grid {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 60px;
+            align-items: start;
+            width: 100%;
+        }
+
+        /* 左侧：个人介绍 */
+        .about-left {
+            position: sticky;
+            top: 120px;
+        }
+
+        .about-content {
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .hero-label {
+            display: inline-block;
+            padding: 8px 20px;
+            border: 1px solid var(--accent);
+            color: var(--accent);
+            font-size: 0.85rem;
+            letter-spacing: 3px;
+            margin-bottom: 32px;
+        }
+
+        .hero-title {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 3.5rem;
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 24px;
+        }
+
+        .hero-title span {
+            color: var(--accent);
+        }
+
+        .hero-subtitle {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            font-weight: 300;
+            margin-bottom: 40px;
+            line-height: 1.8;
+        }
+
+        .about-avatar {
+            margin-bottom: 32px;
+        }
+
+        .avatar-small-container {
+            position: relative;
+            width: 160px;
+            height: 160px;
+        }
+
+        .avatar-small-frame {
+            position: absolute;
+            inset: 0;
+            border: 2px solid var(--accent);
+            border-radius: 50%;
+            transform: translate(6px, 6px);
+            transition: transform 0.3s;
+        }
+
+        .avatar-small-container:hover .avatar-small-frame {
+            transform: translate(4px, 4px);
+        }
+
+        .avatar-small-img {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+            filter: grayscale(20%);
+            transition: all 0.3s;
+        }
+
+        .avatar-small-container:hover .avatar-small-img {
+            filter: grayscale(0%);
+        }
+
+        /* 右侧：核心优势 */
+        .advantages-right {
+            padding-top: 20px;
+        }
+
+        .advantages-header {
+            margin-bottom: 40px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .section-label {
+            display: inline-block;
+            color: var(--accent);
+            font-size: 0.9rem;
+            letter-spacing: 4px;
+            margin-bottom: 8px;
+        }
+
+        .section-title {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 2rem;
+            font-weight: 700;
+        }
+
+        .advantages-list {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .advantage-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            padding: 32px 24px;
+            transition: all 0.4s;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .advantage-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--accent);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.4s;
+        }
+
+        .advantage-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .advantage-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(201,169,110,0.3);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+        }
+
+        .advantage-number {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 2rem;
+            color: var(--accent);
+            opacity: 0.3;
+            margin-bottom: 16px;
+            line-height: 1;
+        }
+
+        .advantage-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: var(--text-primary);
+        }
+
+        .advantage-desc {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            line-height: 1.7;
+            flex: 1;
+        }
+
+        /* 工作经历区域 */
+        .experience {
+            padding: 120px 0;
+            position: relative;
+        }
+
+        .experience::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--accent), transparent);
+            opacity: 0.3;
+        }
+
+        .experience-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .experience-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            padding: 40px 36px;
+            transition: all 0.4s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .experience-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--accent);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.4s;
+        }
+
+        .experience-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .experience-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(201,169,110,0.3);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+        }
+
+        .experience-header {
+            margin-bottom: 28px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .experience-company {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 10px;
+        }
+
+        .experience-meta {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .experience-position {
+            color: var(--accent);
+            font-weight: 500;
+            letter-spacing: 1px;
+            font-size: 0.9rem;
+        }
+
+        .experience-time {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+        }
+
+        .experience-body {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .experience-section h4 {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .experience-section h4::before {
+            content: '';
+            width: 4px;
+            height: 14px;
+            background: var(--accent);
+            opacity: 0.6;
+        }
+
+        .experience-section ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .experience-section ul li {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            line-height: 1.7;
+            padding-left: 16px;
+            position: relative;
+            margin-bottom: 8px;
+        }
+
+        .experience-section ul li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 10px;
+            width: 5px;
+            height: 5px;
+            background: var(--accent);
+            opacity: 0.4;
+            border-radius: 50%;
+        }
+
+        /* 专业技能区域 */
+        .skills {
+            padding: 120px 0;
+            background: var(--bg-secondary);
+            position: relative;
+        }
+
+        .skills::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--accent), transparent);
+            opacity: 0.3;
+        }
+
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .skill-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            padding: 36px 28px;
+            text-align: center;
+            transition: all 0.4s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .skill-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--accent);
+            transform: scaleX(0);
+            transform-origin: center;
+            transition: transform 0.4s;
+        }
+
+        .skill-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .skill-card:hover {
+            transform: translateY(-6px);
+            border-color: rgba(201,169,110,0.3);
+            box-shadow: 0 15px 50px rgba(0,0,0,0.3);
+        }
+
+        .skill-icon {
+            font-size: 2rem;
+            margin-bottom: 16px;
+            opacity: 0.6;
+        }
+
+        .skill-name {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .skill-category {
+            font-size: 0.8rem;
+            color: var(--accent);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        /* 作品集区域 */
+        .portfolio {
+            padding: 120px 0;
+            background: var(--bg-secondary);
+            position: relative;
+        }
+
+        .portfolio::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--accent), transparent);
+            opacity: 0.3;
+        }
+
+        .portfolio-content {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .portfolio-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            padding: 60px;
+            margin-top: 48px;
+            transition: all 0.4s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .portfolio-card::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: var(--accent);
+            transform: scaleX(0);
+            transform-origin: center;
+            transition: transform 0.4s;
+        }
+
+        .portfolio-card:hover::after {
+            transform: scaleX(1);
+        }
+
+        .portfolio-card:hover {
+            border-color: rgba(201,169,110,0.2);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+        }
+
+        .portfolio-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 32px;
+            background: rgba(201,169,110,0.1);
+            border: 1px solid rgba(201,169,110,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .portfolio-icon svg {
+            width: 36px;
+            height: 36px;
+            stroke: var(--accent);
+        }
+
+        .portfolio-title {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 1.5rem;
+            margin-bottom: 16px;
+        }
+
+        .portfolio-desc {
+            color: var(--text-secondary);
+            margin-bottom: 32px;
+        }
+
+        .portfolio-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 500;
+            letter-spacing: 2px;
+            transition: gap 0.3s;
+        }
+
+        .portfolio-link:hover {
+            gap: 16px;
+        }
+
+        /* 页脚 */
+        footer {
+            padding: 60px 48px;
+            text-align: center;
+            border-top: 1px solid var(--border);
+        }
+
+        .footer-text {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            letter-spacing: 2px;
+        }
+
+        /* 动画 */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* 滚动显示 */
+        .scroll-reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.8s ease-out;
+        }
+
+        .scroll-reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* 响应式 */
+        @media (max-width: 968px) {
+            .about-advantages-grid {
+                grid-template-columns: 1fr;
+                gap: 60px;
+            }
+
+            .about-left {
+                position: static;
+                text-align: center;
+            }
+
+            .about-avatar {
+                display: flex;
+                justify-content: center;
+            }
+
+            .hero-title {
+                font-size: 2.5rem;
+            }
+
+            .advantages-header {
+                text-align: center;
+            }
+
+            .advantages-list {
+                grid-template-columns: 1fr;
+            }
+
+            .experience-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .experience-card {
+                padding: 32px 24px;
+            }
+
+            .experience-meta {
+                flex-direction: column;
+                gap: 8px;
+                align-items: flex-start;
+            }
+
+            .skills-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .avatar-small-container {
+                width: 120px;
+                height: 120px;
+            }
+
+            nav {
+                padding: 20px 24px;
+            }
+
+            .nav-links {
+                gap: 20px;
+            }
+
+            .container {
+                padding: 0 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-decoration"></div>
+
+    <nav>
+        <div class="logo">WANG</div>
+        <ul class="nav-links">
+            <li><a href="#about">关于</a></li>
+            <li><a href="#experience">经历</a></li>
+            <li><a href="#skills">技能</a></li>
+            <li><a href="#portfolio">作品集</a></li>
+        </ul>
+    </nav>
+
+    <section class="about-advantages" id="about">
+        <div class="container">
+            <div class="about-advantages-grid">
+                <!-- 左侧：个人介绍 -->
+                <div class="about-left">
+                    <div class="about-content scroll-reveal">
+                        <div class="about-avatar">
+                            <div class="avatar-small-container">
+                                <div class="avatar-small-frame"></div>
+                                <img src="avatar.jpg" alt="王先生" class="avatar-small-img">
+                            </div>
+                        </div>
+                        <div class="hero-label">产品经理</div>
+                        <h1 class="hero-title">你好，<br>我是<span>王先生</span></h1>
+                        <p class="hero-subtitle">专注于B端产品设计与医疗信息化系统，用产品思维解决复杂业务问题。</p>
+                    </div>
+                </div>
+                <!-- 右侧：核心优势 -->
+                <div class="advantages-right">
+                    <div class="advantages-header scroll-reveal">
+                        <div class="section-label">核心优势</div>
+                        <h2 class="section-title">专业能力</h2>
+                    </div>
+                    <div class="advantages-list">
+                        <div class="advantage-card scroll-reveal">
+                            <div class="advantage-number">01</div>
+                            <h3 class="advantage-title">行业能力</h3>
+                            <p class="advantage-desc">1年B端产品经验，涉及App/小程序/H5/Web等多端产品。对医疗信息化系统、ERP系统有充分认知，具备独立负责0-1规划设计经验，熟悉完整产品生命周期。</p>
+                        </div>
+                        <div class="advantage-card scroll-reveal">
+                            <div class="advantage-number">02</div>
+                            <h3 class="advantage-title">严谨细致</h3>
+                            <p class="advantage-desc">设计需求文档时主动补充字段校验规则和异常分支，降低与开发、测试的沟通成本。注重细节，确保产品方案的完整性和可执行性。</p>
+                        </div>
+                        <div class="advantage-card scroll-reveal">
+                            <div class="advantage-number">03</div>
+                            <h3 class="advantage-title">AIGC应用</h3>
+                            <p class="advantage-desc">熟练使用DeepSeek、ChatGPT等AIGC工具，了解大模型选型和能力边界，擅长撰写和优化Prompt，提升工作效率。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="experience" id="experience">
+        <div class="container">
+            <div class="section-header scroll-reveal">
+                <div class="section-label">职业履历</div>
+                <h2 class="section-title">工作经历</h2>
+            </div>
+            <div class="experience-grid">
+                <div class="experience-card scroll-reveal">
+                    <div class="experience-header">
+                        <div class="experience-company">海鹚科技有限公司</div>
+                        <div class="experience-meta">
+                            <span class="experience-position">产品助理</span>
+                            <span class="experience-time">2024.7 ~ 2025.4</span>
+                        </div>
+                    </div>
+                    <div class="experience-body">
+                        <div class="experience-section">
+                            <h4>工作内容</h4>
+                            <ul>
+                                <li>协助收集用户反馈，分析业务数据，关注行业同质产品的业务动向，挖掘核心需求</li>
+                                <li>使用Axure进行产品原型设计，具备独立完成新功能产品设计的能力</li>
+                                <li>主动与UI设计师及开发工程师沟通协作，推动项目进度</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="experience-card scroll-reveal">
+                    <div class="experience-header">
+                        <div class="experience-company">工作业绩</div>
+                        <div class="experience-meta">
+                            <span class="experience-position">核心成果</span>
+                            <span class="experience-time">2024.7 ~ 2025.4</span>
+                        </div>
+                    </div>
+                    <div class="experience-body">
+                        <div class="experience-section">
+                            <h4>关键产出</h4>
+                            <ul>
+                                <li>以产品目标进行需求分析、竞品分析，拆解需求，撰写文档为后续功能规划提供支持</li>
+                                <li>独立输出PRD文档进行功能、流程图说明</li>
+                                <li>参与多个产品的原型设计，涉及后台、App、小程序等端口，输出原型图100+</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="skills" id="skills">
+        <div class="container">
+            <div class="section-header scroll-reveal">
+                <div class="section-label">技术栈</div>
+                <h2 class="section-title">专业技能</h2>
+            </div>
+            <div class="skills-grid">
+                <div class="skill-card scroll-reveal">
+                    <div class="skill-icon">◆</div>
+                    <div class="skill-name">需求分析</div>
+                    <div class="skill-category">核心能力</div>
+                </div>
+                <div class="skill-card scroll-reveal">
+                    <div class="skill-icon">◇</div>
+                    <div class="skill-name">产品设计</div>
+                    <div class="skill-category">核心能力</div>
+                </div>
+                <div class="skill-card scroll-reveal">
+                    <div class="skill-icon">◈</div>
+                    <div class="skill-name">原型设计</div>
+                    <div class="skill-category">核心能力</div>
+                </div>
+                <div class="skill-card scroll-reveal">
+                    <div class="skill-icon">▣</div>
+                    <div class="skill-name">Axure</div>
+                    <div class="skill-category">工具</div>
+                </div>
+                <div class="skill-card scroll-reveal">
+                    <div class="skill-icon">▢</div>
+                    <div class="skill-name">Visio</div>
+                    <div class="skill-category">工具</div>
+                </div>
+                <div class="skill-card scroll-reveal">
+                    <div class="skill-icon">▤</div>
+                    <div class="skill-name">墨刀</div>
+                    <div class="skill-category">工具</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="portfolio" id="portfolio">
+        <div class="container">
+            <div class="section-header scroll-reveal">
+                <div class="section-label">作品展示</div>
+                <h2 class="section-title">作品集</h2>
+            </div>
+            <div class="portfolio-content">
+                <div class="portfolio-card scroll-reveal">
+                    <div class="portfolio-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5">
+                            <path d="M2 7l10-5 10 5-10 5z"/>
+                            <path d="M2 17l10 5 10-5"/>
+                            <path d="M2 12l10 5 10-5"/>
+                        </svg>
+                    </div>
+                    <h3 class="portfolio-title">产品设计作品集</h3>
+                    <p class="portfolio-desc">包含多个B端产品项目案例，展示从需求调研到方案设计的完整产品工作流。</p>
+                    <a href="https://codesign.qq.com/s/671597969622463" target="_blank" class="portfolio-link">
+                        访问作品
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7"/>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p class="footer-text"> 王先生 · 产品经理</p>
+    </footer>
+
+    <script>
+        // 滚动显示动画
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.scroll-reveal').forEach(el => {
+            observer.observe(el);
+        });
+
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
